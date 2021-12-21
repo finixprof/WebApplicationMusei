@@ -1,0 +1,44 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+<div class="text-center">
+    <h1 class="display-4">Homepage Musei</h1>
+    <div class="container">
+        <div class="row">
+            <div class="col-4">
+                <div class="card" style="width: 18rem;">
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Musei" asp-action="Index">
+                        <img class="card-img-top" src="~/images/musei.jpg" alt="Musei">
+                        <div class="card-body">
+                            <p class="card-text">Musei</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="card" style="width: 18rem;">
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Nazioni" asp-action="Index">
+                        <img class="card-img-top" src="~/images/nazioni.jpg" alt="Nazioni">
+                        <div class="card-body">
+                            <p class="card-text">Nazioni</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="card" style="width: 18rem;">
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Citta" asp-action="Index">
+                        <img class="card-img-top" src="~/images/cities.jpg" alt="Città">
+                        <div class="card-body">
+                            <p class="card-text">Città</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+</div>
