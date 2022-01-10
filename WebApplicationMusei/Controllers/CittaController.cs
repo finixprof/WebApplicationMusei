@@ -8,45 +8,65 @@ using WebApplicationMusei.Models.Entities;
 
 namespace WebApplicationMusei.Controllers
 {
-    public class NazioniController : Controller
+    public class CittaController : Controller
     {
-
-        private static List<Nazione> nazioni = new List<Nazione>
+        private static List<Citta> citta = new List<Citta>
+        {
+            new Citta
             {
-                new Nazione
-                {
-                    Id = 1,
-                    Nome = "Italia"
-                },
-                new Nazione
-                {
-                    Id = 2,
-                    Nome = "Spagna"
-                }
-            };
+                Id = 1,
+                NazioneId = 1,
+                Nome = "Roma"
+            },
+            new Citta
+            {
+                Id = 2,
+                NazioneId = 1,
+                Nome = "Milano"
+            },
+            new Citta
+            {
+                Id = 3,
+                NazioneId = 1,
+                Nome = "Reggio Emilia"
+            },
+            new Citta
+            {
+                Id = 4,
+                NazioneId = 2,
+                Nome = "Barcellona"
+            },
+            new Citta
+            {
+                Id = 5,
+                NazioneId = 2,
+                Nome = "Madrid"
+            },
+
+        };
 
 
-        // GET: NazioniController
+        // GET: CittaController
         public ActionResult Index()
         {
-            var model = nazioni;
+            var model = citta; 
             return View(model);
         }
 
-        // GET: NazioniController/Details/5
+        // GET: CittaController/Details/5
         public ActionResult Details(int id)
         {
-            var model = nazioni.Where(t => t.Id == id).FirstOrDefault();
+            var model = citta.Where(t => t.Id == id).FirstOrDefault();
             return View(model);
         }
 
-        // GET: NazioniController/Create
+        // GET: CittaController/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: NazioniController/Create
+        // POST: CittaController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(IFormCollection collection)
@@ -61,13 +81,13 @@ namespace WebApplicationMusei.Controllers
             }
         }
 
-        // GET: NazioniController/Edit/5
+        // GET: CittaController/Edit/5
         public ActionResult Edit(int id)
         {
             return View();
         }
 
-        // POST: NazioniController/Edit/5
+        // POST: CittaController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(int id, IFormCollection collection)
@@ -82,13 +102,13 @@ namespace WebApplicationMusei.Controllers
             }
         }
 
-        // GET: NazioniController/Delete/5
+        // GET: CittaController/Delete/5
         public ActionResult Delete(int id)
         {
             return View();
         }
 
-        // POST: NazioniController/Delete/5
+        // POST: CittaController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int id, IFormCollection collection)

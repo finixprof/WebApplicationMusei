@@ -8,45 +8,47 @@ using WebApplicationMusei.Models.Entities;
 
 namespace WebApplicationMusei.Controllers
 {
-    public class NazioniController : Controller
+    public class MuseiController : Controller
     {
 
-        private static List<Nazione> nazioni = new List<Nazione>
+        private static List<Museo> musei = new List<Museo>
+        {
+            new Museo
             {
-                new Nazione
-                {
-                    Id = 1,
-                    Nome = "Italia"
-                },
-                new Nazione
-                {
-                    Id = 2,
-                    Nome = "Spagna"
-                }
-            };
+                Id = 1,
+                CittaId = 1,
+                Denominazione = "xyz"
+            },
+            new Museo
+            {
+                Id = 1,
+                CittaId = 5,
+                Denominazione = "Bla bla bla"
+            },
+        };
 
 
-        // GET: NazioniController
+        // GET: MuseiController
         public ActionResult Index()
         {
-            var model = nazioni;
+            var model = musei;
             return View(model);
         }
 
-        // GET: NazioniController/Details/5
+        // GET: MuseiController/Details/5
         public ActionResult Details(int id)
         {
-            var model = nazioni.Where(t => t.Id == id).FirstOrDefault();
+            var model = musei.Where(t => t.Id == id).FirstOrDefault();
             return View(model);
         }
 
-        // GET: NazioniController/Create
+        // GET: MuseiController/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: NazioniController/Create
+        // POST: MuseiController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(IFormCollection collection)
@@ -61,13 +63,13 @@ namespace WebApplicationMusei.Controllers
             }
         }
 
-        // GET: NazioniController/Edit/5
+        // GET: MuseiController/Edit/5
         public ActionResult Edit(int id)
         {
             return View();
         }
 
-        // POST: NazioniController/Edit/5
+        // POST: MuseiController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(int id, IFormCollection collection)
@@ -82,13 +84,13 @@ namespace WebApplicationMusei.Controllers
             }
         }
 
-        // GET: NazioniController/Delete/5
+        // GET: MuseiController/Delete/5
         public ActionResult Delete(int id)
         {
             return View();
         }
 
-        // POST: NazioniController/Delete/5
+        // POST: MuseiController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int id, IFormCollection collection)
