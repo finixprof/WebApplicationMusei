@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WebApplicationMusei.Helpers;
 using WebApplicationMusei.Models.Entities;
 
 namespace WebApplicationMusei.Controllers
@@ -11,32 +12,19 @@ namespace WebApplicationMusei.Controllers
     public class NazioniController : Controller
     {
 
-        private static List<Nazione> nazioni = new List<Nazione>
-            {
-                new Nazione
-                {
-                    Id = 1,
-                    Nome = "Italia"
-                },
-                new Nazione
-                {
-                    Id = 2,
-                    Nome = "Spagna"
-                }
-            };
 
 
         // GET: NazioniController
         public ActionResult Index()
         {
-            var model = nazioni;
+            var model = DatabaseHelper.GetAllNazione(); 
             return View(model);
         }
 
         // GET: NazioniController/Details/5
         public ActionResult Details(int id)
         {
-            var model = nazioni.Where(t => t.Id == id).FirstOrDefault();
+            var model = DatabaseHelper.GetNazioneById(id);
             return View(model);
         }
 

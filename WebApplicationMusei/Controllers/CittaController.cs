@@ -4,59 +4,27 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WebApplicationMusei.Helpers;
 using WebApplicationMusei.Models.Entities;
 
 namespace WebApplicationMusei.Controllers
 {
     public class CittaController : Controller
     {
-        private static List<Citta> citta = new List<Citta>
-        {
-            new Citta
-            {
-                Id = 1,
-                NazioneId = 1,
-                Nome = "Roma"
-            },
-            new Citta
-            {
-                Id = 2,
-                NazioneId = 1,
-                Nome = "Milano"
-            },
-            new Citta
-            {
-                Id = 3,
-                NazioneId = 1,
-                Nome = "Reggio Emilia"
-            },
-            new Citta
-            {
-                Id = 4,
-                NazioneId = 2,
-                Nome = "Barcellona"
-            },
-            new Citta
-            {
-                Id = 5,
-                NazioneId = 2,
-                Nome = "Madrid"
-            },
-
-        };
+        
 
 
         // GET: CittaController
         public ActionResult Index()
         {
-            var model = citta; 
+            var model = DatabaseHelper.GetAllCitta(); 
             return View(model);
         }
 
         // GET: CittaController/Details/5
         public ActionResult Details(int id)
         {
-            var model = citta.Where(t => t.Id == id).FirstOrDefault();
+            var model = DatabaseHelper.GetCittaById(id);
             return View(model);
         }
 

@@ -4,41 +4,24 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WebApplicationMusei.Helpers;
 using WebApplicationMusei.Models.Entities;
 
 namespace WebApplicationMusei.Controllers
 {
     public class MuseiController : Controller
     {
-
-        private static List<Museo> musei = new List<Museo>
-        {
-            new Museo
-            {
-                Id = 1,
-                CittaId = 1,
-                Denominazione = "xyz"
-            },
-            new Museo
-            {
-                Id = 1,
-                CittaId = 5,
-                Denominazione = "Bla bla bla"
-            },
-        };
-
-
-        // GET: MuseiController
+                // GET: MuseiController
         public ActionResult Index()
         {
-            var model = musei;
+            var model = DatabaseHelper.GetAllMuseo();
             return View(model);
         }
 
         // GET: MuseiController/Details/5
         public ActionResult Details(int id)
         {
-            var model = musei.Where(t => t.Id == id).FirstOrDefault();
+            var model = DatabaseHelper.GetMuseoById(id);
             return View(model);
         }
 
