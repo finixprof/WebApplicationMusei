@@ -41,6 +41,8 @@ namespace WebApplicationMusei.Controllers
         {
             try
             {
+                var model = new Nazione();
+                DatabaseHelper.SaveNazione(model);
                 return RedirectToAction(nameof(Index));
             }
             catch

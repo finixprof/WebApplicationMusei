@@ -48,6 +48,28 @@ namespace WebApplicationMusei.Helpers
             return nazioni;
         }
 
+        public static int SaveNazione(Nazione model)
+        {
+            if (model.Id>0)
+            {
+                return InsertNazione(model);
+            }
+            else
+            {
+                return UpdateNazione(model);
+            }
+        }
+
+        private static int UpdateNazione(Nazione model)
+        {
+            throw new NotImplementedException();
+        }
+
+        private static int InsertNazione(Nazione model)
+        {
+            throw new NotImplementedException();
+        }
+
         public static Nazione GetNazioneById(int id)
         {
             var nazione = new Nazione();
