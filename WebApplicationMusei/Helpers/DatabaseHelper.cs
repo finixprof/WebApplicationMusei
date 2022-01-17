@@ -1,6 +1,8 @@
-﻿using System;
+﻿using MySql.Data.MySqlClient;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using Dapper;
 using System.Threading.Tasks;
 using WebApplicationMusei.Models.Entities;
 
@@ -8,100 +10,77 @@ namespace WebApplicationMusei.Helpers
 {
     public static class DatabaseHelper
     {
-        private static List<Museo> musei = new List<Museo>
-        {
-            new Museo
-            {
-                Id = 1,
-                CittaId = 1,
-                Denominazione = "xyz"
-            },
-            new Museo
-            {
-                Id = 1,
-                CittaId = 5,
-                Denominazione = "Bla bla bla"
-            },
-        };
 
-        private static List<Citta> citta = new List<Citta>
-        {
-            new Citta
-            {
-                Id = 1,
-                NazioneId = 1,
-                Nome = "Roma"
-            },
-            new Citta
-            {
-                Id = 2,
-                NazioneId = 1,
-                Nome = "Milano"
-            },
-            new Citta
-            {
-                Id = 3,
-                NazioneId = 1,
-                Nome = "Reggio Emilia"
-            },
-            new Citta
-            {
-                Id = 4,
-                NazioneId = 2,
-                Nome = "Barcellona"
-            },
-            new Citta
-            {
-                Id = 5,
-                NazioneId = 2,
-                Nome = "Madrid"
-            },
-
-        };
-
-        private static List<Nazione> nazioni = new List<Nazione>
-            {
-                new Nazione
-                {
-                    Id = 1,
-                    Nome = "Italia"
-                },
-                new Nazione
-                {
-                    Id = 2,
-                    Nome = "Spagna"
-                }
-            };
+        public static string ConnectionString { get; internal set; }
 
         public static List<Museo> GetAllMuseo()
         {
+            var musei = new List<Museo>();
+            using (var db = new MySqlConnection(ConnectionString))
+            {
+                var querySql = "SELECT * FROM museo";
+                musei = db.Query<Museo>(querySql).ToList();
+            }
             return musei;
         }
 
         public static Museo GetMuseoById(int id)
         {
-            return musei.Where(t => t.Id == id).FirstOrDefault();
+            var museo = new Museo();
+            using (var db = new MySqlConnection(ConnectionString))
+            {
+                var querySql = "SELECT * FROM museo WHERE id = @id";
+                museo = db.Query<Museo>(querySql, new { id = id}).FirstOrDefault();
+            }
+
+            return museo;
         }
 
 
         public static List<Nazione> GetAllNazione()
         {
+            var nazioni = new List<Nazione>();
+            using (var db = new MySqlConnection(ConnectionString))
+            {
+                var querySql = "SELECT * FROM nazione";
+                nazioni = db.Query<Nazione>(querySql).ToList();
+            }
             return nazioni;
         }
 
         public static Nazione GetNazioneById(int id)
         {
-            return nazioni.Where(t => t.Id == id).FirstOrDefault();
+            var nazione = new Nazione();
+            using (var db = new MySqlConnection(ConnectionString))
+            {
+                var querySql = "SELECT * FROM nazione WHERE id = @id";
+                nazione = db.Query<Nazione>(querySql, new { id = id }).FirstOrDefault();
+            }
+
+            return nazione;
         }
 
         public static List<Citta> GetAllCitta()
         {
+            var citta = new List<Citta>();
+            using (var db = new MySqlConnection(ConnectionString))
+            {
+                var querySql = "SELECT * FROM citta";
+                citta = db.Query<Citta>(querySql).ToList();
+            }
             return citta;
         }
 
         public static Citta GetCittaById(int id)
         {
-            return citta.Where(t => t.Id == id).FirstOrDefault();
+            var citta = new Citta();
+            using (var db = new MySqlConnection(ConnectionString))
+            {
+                var querySql = "SELECT * FROM citta WHERE id = @id";
+                citta = db.Query<Citta>(querySql, new { id = id }).FirstOrDefault();
+            }
+
+            return citta;
         }
     }
 }

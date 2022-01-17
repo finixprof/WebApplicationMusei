@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WebApplicationMusei.Helpers;
 
 namespace WebApplicationMusei
 {
@@ -24,6 +25,8 @@ namespace WebApplicationMusei
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+            DatabaseHelper.ConnectionString = Configuration.GetConnectionString("Musei");
+            //Configuration.GetValue<string>("key"); per leggere qualsiasi parametro da appsettings.json
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
