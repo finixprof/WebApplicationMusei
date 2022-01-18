@@ -48,9 +48,9 @@ namespace WebApplicationMusei.Helpers
             return nazioni;
         }
 
-        public static int SaveNazione(Nazione model)
+        public static Nazione SaveNazione(Nazione model)
         {
-            if (model.Id>0)
+            if (model.Id==0)
             {
                 return InsertNazione(model);
             }
@@ -60,14 +60,30 @@ namespace WebApplicationMusei.Helpers
             }
         }
 
-        private static int UpdateNazione(Nazione model)
+        private static Nazione UpdateNazione(Nazione model)
         {
-            throw new NotImplementedException();
+            //using (var db = new MySqlConnection(ConnectionString))
+            //{
+            //    var sqlQuery = "INSERT INTO nazione (nome) VALUES (@nome); " +
+            //            "SELECT LAST_INSERT_ID()";
+            //    model.Id = db.Query<int>(sqlQuery, model).FirstOrDefault();
+            //    if (model.Id > 0)
+            //        return model;
+            //}
+            throw new Exception("Errore aggiornamento non completato");
         }
 
-        private static int InsertNazione(Nazione model)
+        private static Nazione InsertNazione(Nazione model)
         {
-            throw new NotImplementedException();
+            using (var db = new MySqlConnection(ConnectionString))
+            {
+                var sqlQuery = "INSERT INTO nazione (nome) VALUES (@nome); " +
+                        "SELECT LAST_INSERT_ID()";
+                model.Id = db.Query<int>(sqlQuery, model).FirstOrDefault();
+                if (model.Id > 0)
+                    return model;
+            }
+            throw new Exception("Errore inserimento non completato");
         }
 
         public static Nazione GetNazioneById(int id)

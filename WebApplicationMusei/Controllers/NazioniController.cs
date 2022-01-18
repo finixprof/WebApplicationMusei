@@ -37,16 +37,17 @@ namespace WebApplicationMusei.Controllers
         // POST: NazioniController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult Create(Nazione model) //IFormCollection collection)
         {
             try
             {
-                var model = new Nazione();
+                //var model = new Nazione();
                 DatabaseHelper.SaveNazione(model);
                 return RedirectToAction(nameof(Index));
             }
-            catch
+            catch(Exception ex)
             {
+                //ex.Message + ModelBinderAttribute dovranno essere passati alla view
                 return View();
             }
         }
