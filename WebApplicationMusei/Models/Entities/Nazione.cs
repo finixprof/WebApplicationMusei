@@ -10,7 +10,8 @@ namespace WebApplicationMusei.Models.Entities
     {
         public int Id { get; set; }
 
-        [Display(Name = "Nome nazione")]
+        [Display(Name = "Nome")]
+        [Required(ErrorMessage = " Il campo 'nome' è obbligatorio")]
         public string Nome { get; set; }
 
     }

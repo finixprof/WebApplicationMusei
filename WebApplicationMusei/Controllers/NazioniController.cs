@@ -66,6 +66,18 @@ namespace WebApplicationMusei.Controllers
         {
             try
             {
+                if (!ModelState.IsValid)
+                {
+                    var msgKo = "Completa tutti i campi nella maniera corretta<br>";
+                    var errors = ModelState.Values.SelectMany(v => v.Errors);
+                    //foreach (var error in errors)
+                    //{
+                    //    msgKo += error.ErrorMessage + "<br>";
+                    //}
+                    var msgKoAggregate = errors.Select(t => t.ErrorMessage).Aggregate((x, y) => $"{x}<br>{y}");
+                    ViewData["MsgKo"] = msgKoAggregate;
+                    return View(model);
+                }
                 DatabaseHelper.SaveNazione(model);
                 //inseriamo messaggio update completato
                 ViewData["MsgOk"] = "Aggiornamento avvenuto con successo"; 
