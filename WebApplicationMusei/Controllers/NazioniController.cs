@@ -17,7 +17,7 @@ namespace WebApplicationMusei.Controllers
         // GET: NazioniController
         public ActionResult Index()
         {
-            var model = DatabaseHelper.GetAllNazione(); 
+            var model = DatabaseHelper.GetAllNazione();
             return View(model);
         }
 
@@ -45,7 +45,7 @@ namespace WebApplicationMusei.Controllers
                 DatabaseHelper.SaveNazione(model);
                 return RedirectToAction(nameof(Index));
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 //ex.Message + ModelBinderAttribute dovranno essere passati alla view
                 return View();
@@ -55,22 +55,27 @@ namespace WebApplicationMusei.Controllers
         // GET: NazioniController/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            var model = DatabaseHelper.GetNazioneById(id);
+            return View(model);
         }
 
         // POST: NazioniController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(Nazione model)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                DatabaseHelper.SaveNazione(model);
+                //inseriamo messaggio update completato
+                ViewData["MsgOk"] = "Aggiornamento avvenuto con successo"; 
             }
             catch
             {
-                return View();
+                //inseriamo un eventuale errore
+                ViewData["MsgKo"] = "Si è verificato un problema durante l'aggiornamento!";
             }
+            return View(model);
         }
 
         // GET: NazioniController/Delete/5

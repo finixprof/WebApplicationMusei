@@ -30,7 +30,7 @@ namespace WebApplicationMusei.Helpers
             using (var db = new MySqlConnection(ConnectionString))
             {
                 var querySql = "SELECT * FROM museo WHERE id = @id";
-                museo = db.Query<Museo>(querySql, new { id = id}).FirstOrDefault();
+                museo = db.Query<Museo>(querySql, new { id = id }).FirstOrDefault();
             }
 
             return museo;
@@ -50,7 +50,7 @@ namespace WebApplicationMusei.Helpers
 
         public static Nazione SaveNazione(Nazione model)
         {
-            if (model.Id==0)
+            if (model.Id == 0)
             {
                 return InsertNazione(model);
             }
@@ -62,14 +62,14 @@ namespace WebApplicationMusei.Helpers
 
         private static Nazione UpdateNazione(Nazione model)
         {
-            //using (var db = new MySqlConnection(ConnectionString))
-            //{
-            //    var sqlQuery = "INSERT INTO nazione (nome) VALUES (@nome); " +
-            //            "SELECT LAST_INSERT_ID()";
-            //    model.Id = db.Query<int>(sqlQuery, model).FirstOrDefault();
-            //    if (model.Id > 0)
-            //        return model;
-            //}
+            using (var db = new MySqlConnection(ConnectionString))
+            {
+                var sqlQuery = "UPDATE nazione SET nome=@nome  WHERE id = @id";
+
+                var affectedRows = db.Execute(sqlQuery, model);
+                if (affectedRows == 1)
+                    return model;
+            }
             throw new Exception("Errore aggiornamento non completato");
         }
 
