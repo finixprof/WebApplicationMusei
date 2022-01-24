@@ -103,8 +103,16 @@ namespace WebApplicationMusei.Helpers
             var citta = new List<Citta>();
             using (var db = new MySqlConnection(ConnectionString))
             {
-                var querySql = "SELECT * FROM citta";
-                citta = db.Query<Citta>(querySql).ToList();
+                var querySql = "SELECT * FROM citta AS c " +
+                    "INNER JOIN nazione AS n ON c.NazioneId = n.Id";
+                citta = db.Query<Citta,Nazione,Citta>(querySql,
+                                (citta, nazione) =>
+                                {
+                                    citta.Nazione = nazione;
+                                    return citta;
+                                }
+                                //,splitOn: "NazioneId"
+                    ).ToList();
             }
             return citta;
         }
@@ -114,8 +122,21 @@ namespace WebApplicationMusei.Helpers
             var citta = new Citta();
             using (var db = new MySqlConnection(ConnectionString))
             {
-                var querySql = "SELECT * FROM citta WHERE id = @id";
-                citta = db.Query<Citta>(querySql, new { id = id }).FirstOrDefault();
+                //var querySql = "SELECT * FROM citta WHERE id = @id";
+                //citta = db.Query<Citta>(querySql, new { id = id }).FirstOrDefault();
+                var querySql = "SELECT * FROM citta AS c " +
+                    " INNER JOIN nazione AS n ON c.NazioneId = n.Id" +
+                    "  WHERE c.id = @id";
+                citta = db.Query<Citta, Nazione, Citta>(querySql,
+                                (citta, nazione) =>
+                                {
+                                    citta.Nazione = nazione;
+                                    return citta;
+                                }
+                                , new { id = id}
+                                //,splitOn: "NazioneId"
+                    ).FirstOrDefault();
+
             }
 
             return citta;

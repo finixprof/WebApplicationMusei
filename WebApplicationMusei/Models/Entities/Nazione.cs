@@ -14,5 +14,10 @@ namespace WebApplicationMusei.Models.Entities
         [Required(ErrorMessage = " Il campo 'nome' è obbligatorio")]
         public string Nome { get; set; }
 
+        [Display(Name = "Flag")]
+        public string ImgBandiera { get; set; }
+
+
+
     }
 }

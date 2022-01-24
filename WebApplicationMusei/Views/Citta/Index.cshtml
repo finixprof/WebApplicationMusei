@@ -7,7 +7,7 @@
 <h1>Città</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Nuovo</a>
 </p>
 <table class="table">
     <thead>
@@ -36,12 +36,12 @@
                 @Html.DisplayFor(modelItem => item.Nome)
             </td>
             <td>
-                @Html.ActionLink(item.NazioneId.ToString(), "Details", "Nazioni", new { id = item.NazioneId })
+                @Html.ActionLink(item.Nazione.Nome, "Details", "Nazioni", new { id = item.NazioneId })
             </td>
             <td>
                 @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-                @Html.ActionLink("Details", "Details", new { id = item.Id }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                @Html.ActionLink("Dettaglio", "Details",  new { id = item.Id }) |
+                @Html.ActionLink("Elimina", "Delete",  new { id = item.Id })
             </td>
         </tr>
         }

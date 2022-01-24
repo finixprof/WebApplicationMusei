@@ -6,4 +6,5 @@
 
 <h1>@Model.Nome</h1>
 
-@Model.Id
+@Html.ActionLink(Model.Nazione.Nome, "Details", "Nazioni", new { id = Model.Nazione.Id })
+<img src="~/uploads/nazioni/@Model.Nazione.Id/@Model.Nazione.ImgBandiera" width="200" />
