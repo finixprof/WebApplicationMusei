@@ -98,6 +98,11 @@ namespace WebApplicationMusei.Helpers
             return nazione;
         }
 
+        internal static void SaveCitta(Citta model)
+        {
+            throw new NotImplementedException();
+        }
+
         public static List<Citta> GetAllCitta()
         {
             var citta = new List<Citta>();

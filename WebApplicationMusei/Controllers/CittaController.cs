@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using WebApplicationMusei.Helpers;
 using WebApplicationMusei.Models.Entities;
+using WebApplicationMusei.Models.Views;
 
 namespace WebApplicationMusei.Controllers
 {
@@ -31,7 +32,10 @@ namespace WebApplicationMusei.Controllers
         // GET: CittaController/Create
         public ActionResult Create()
         {
-            return View();
+            var model = new CittaViewModel();
+            model.Nazioni = DatabaseHelper.GetAllNazione();
+
+            return View(model);
         }
 
         // POST: CittaController/Create
@@ -41,6 +45,8 @@ namespace WebApplicationMusei.Controllers
         {
             try
             {
+                // if (ModelState.IsValid) da completare
+                // qui  bisogna controllare anche nazioneid > 0
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -52,22 +58,44 @@ namespace WebApplicationMusei.Controllers
         // GET: CittaController/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            var citta = DatabaseHelper.GetCittaById(id);
+            var model = new CittaViewModel();
+            model.Nazioni = DatabaseHelper.GetAllNazione();
+            model.Id = citta.Id;
+            model.Nome = citta.Nome;
+            model.NazioneId = citta.NazioneId;
+            return View(model);
         }
 
         // POST: CittaController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit( Citta model)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                if (!ModelState.IsValid || model.NazioneId<1)
+                {
+                    var msgKo = "Completa tutti i campi nella maniera corretta<br>";
+                    var errors = ModelState.Values.SelectMany(v => v.Errors);
+                    //foreach (var error in errors)
+                    //{
+                    //    msgKo += error.ErrorMessage + "<br>";
+                    //}
+                    var msgKoAggregate = errors.Select(t => t.ErrorMessage).Aggregate((x, y) => $"{x}<br>{y}");
+                    ViewData["MsgKo"] = msgKo+msgKoAggregate;
+                    return View(model);
+                }
+                DatabaseHelper.SaveCitta(model);
+                //inseriamo messaggio update completato
+                ViewData["MsgOk"] = "Aggiornamento avvenuto con successo";
             }
             catch
             {
-                return View();
+                //inseriamo un eventuale errore
+                ViewData["MsgKo"] = "Si è verificato un problema durante l'aggiornamento!";
             }
+            return View(model);
         }
 
         // GET: CittaController/Delete/5

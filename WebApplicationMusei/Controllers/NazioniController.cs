@@ -41,6 +41,8 @@ namespace WebApplicationMusei.Controllers
         {
             try
             {
+
+                // if (ModelState.IsValid) da completare
                 //var model = new Nazione();
                 DatabaseHelper.SaveNazione(model);
                 return RedirectToAction(nameof(Index));
@@ -75,7 +77,7 @@ namespace WebApplicationMusei.Controllers
                     //    msgKo += error.ErrorMessage + "<br>";
                     //}
                     var msgKoAggregate = errors.Select(t => t.ErrorMessage).Aggregate((x, y) => $"{x}<br>{y}");
-                    ViewData["MsgKo"] = msgKoAggregate;
+                    ViewData["MsgKo"] = msgKo+msgKoAggregate;
                     return View(model);
                 }
                 DatabaseHelper.SaveNazione(model);

@@ -11,9 +11,11 @@ namespace WebApplicationMusei.Models.Entities
         public int Id { get; set; }
 
         [Display(Name = "Nazione")]
+        [Required]
         public int NazioneId { get; set; }
         public Nazione Nazione { get; set; }
 
+        [Required]
         public string Nome { get; set; }
     }
 }
