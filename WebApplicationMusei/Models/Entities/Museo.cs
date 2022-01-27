@@ -11,6 +11,7 @@ namespace WebApplicationMusei.Models.Entities
         public int Id { get; set; }
         [Required]
         public string Denominazione { get; set; }
+        [Display(Name = "Citta")]
         public int CittaId { get; set; }
 
         public Citta Citta { get; set; }

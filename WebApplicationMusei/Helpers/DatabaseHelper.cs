@@ -18,8 +18,16 @@ namespace WebApplicationMusei.Helpers
             var musei = new List<Museo>();
             using (var db = new MySqlConnection(ConnectionString))
             {
-                var querySql = "SELECT * FROM museo";
-                musei = db.Query<Museo>(querySql).ToList();
+                var querySql = "SELECT * FROM museo AS m " +
+                    "INNER JOIN citta AS c ON m.CittaId = c.Id";
+                musei = db.Query<Museo, Citta, Museo>(querySql,
+                                (museo, citta) =>
+                                {
+                                    museo.Citta = citta;
+                                    return museo;
+                                }
+                                //,splitOn: "NazioneId"
+                    ).ToList();
             }
             return musei;
         }
@@ -29,10 +37,17 @@ namespace WebApplicationMusei.Helpers
             var museo = new Museo();
             using (var db = new MySqlConnection(ConnectionString))
             {
-                var querySql = "SELECT * FROM museo WHERE id = @id";
-                museo = db.Query<Museo>(querySql, new { id = id }).FirstOrDefault();
+                var querySql = "SELECT * FROM museo AS m " +
+                    "INNER JOIN citta AS c ON m.CittaId = c.Id" +
+                    " WHERE c.Id = @id";
+                museo = db.Query<Museo, Citta, Museo>(querySql,
+                                (museo, citta) =>
+                                {
+                                    museo.Citta = citta;
+                                    return museo;
+                                }
+                    ).FirstOrDefault();
             }
-
             return museo;
         }
 

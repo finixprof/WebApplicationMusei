@@ -36,7 +36,7 @@
                 @Html.DisplayFor(modelItem => item.Denominazione)
             </td>
             <td>
-                @Html.ActionLink(item.CittaId.ToString(), "Details", "Citta", new { id = item.CittaId })
+                @Html.ActionLink(item.Citta.Nome, "Details", "Citta", new { id = item.Citta.Id })
             </td>
             <td>
                 @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
