@@ -20,6 +20,10 @@
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
+                @if (ViewData["MsgKo"] != null)
+                {
+                    <span class="text-danger"> @Html.Raw(ViewData["MsgKo"].ToString())</span>
+                }
             </div>
         </form>
     </div>

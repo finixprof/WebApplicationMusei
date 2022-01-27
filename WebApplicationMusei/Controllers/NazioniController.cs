@@ -42,15 +42,23 @@ namespace WebApplicationMusei.Controllers
             try
             {
 
-                // if (ModelState.IsValid) da completare
+                if (!ModelState.IsValid)
+                {
+                    var msgKo = "Completa tutti i campi nella maniera corretta<br>";
+                    var errors = ModelState.Values.SelectMany(v => v.Errors); //recuperiamo la lista di errori
+                    var msgKoAggregate = errors.Select(t => t.ErrorMessage).Aggregate((x, y) => $"{x}<br>{y}"); //concatena in una string gli errori
+                    ViewData["MsgKo"] = msgKo + msgKoAggregate;
+                    return View(model);
+                }
                 //var model = new Nazione();
                 DatabaseHelper.SaveNazione(model);
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index)); //redirect alla lista se non scatta un'eccezione
             }
             catch (Exception ex)
             {
                 //ex.Message + ModelBinderAttribute dovranno essere passati alla view
-                return View();
+                ViewData["MsgKo"] = ex.Message; //ex.message deve essere loggato e non inviato all'utente, customizzare il msg in Errore server riprova piu tardi
+                return View(model);
             }
         }
 

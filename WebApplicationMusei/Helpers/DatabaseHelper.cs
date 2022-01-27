@@ -98,9 +98,42 @@ namespace WebApplicationMusei.Helpers
             return nazione;
         }
 
-        internal static void SaveCitta(Citta model)
+        internal static Citta SaveCitta(Citta model)
         {
-            throw new NotImplementedException();
+            if (model.Id == 0)
+            {
+                return InsertCitta(model);
+            }
+            else
+            {
+                return UpdateCitta(model);
+            }
+        }
+
+        private static Citta UpdateCitta(Citta model)
+        {
+            using (var db = new MySqlConnection(ConnectionString))
+            {
+                var sqlQuery = "UPDATE citta SET nome=@nome, nazioneid=@nazioneid  WHERE id = @id";
+
+                var affectedRows = db.Execute(sqlQuery, model);
+                if (affectedRows == 1)
+                    return model;
+            }
+            throw new Exception("Errore aggiornamento non completato");
+        }
+
+        private static Citta InsertCitta(Citta model)
+        {
+            using (var db = new MySqlConnection(ConnectionString))
+            {
+                var sqlQuery = "INSERT INTO citta (nome,nazioneid) VALUES (@nome, @nazioneid); " +
+                        "SELECT LAST_INSERT_ID()";
+                model.Id = db.Query<int>(sqlQuery, model).FirstOrDefault();
+                if (model.Id > 0)
+                    return model;
+            }
+            throw new Exception("Errore inserimento non completato");
         }
 
         public static List<Citta> GetAllCitta()
@@ -110,7 +143,7 @@ namespace WebApplicationMusei.Helpers
             {
                 var querySql = "SELECT * FROM citta AS c " +
                     "INNER JOIN nazione AS n ON c.NazioneId = n.Id";
-                citta = db.Query<Citta,Nazione,Citta>(querySql,
+                citta = db.Query<Citta, Nazione, Citta>(querySql,
                                 (citta, nazione) =>
                                 {
                                     citta.Nazione = nazione;
@@ -138,7 +171,7 @@ namespace WebApplicationMusei.Helpers
                                     citta.Nazione = nazione;
                                     return citta;
                                 }
-                                , new { id = id}
+                                , new { id = id }
                                 //,splitOn: "NazioneId"
                     ).FirstOrDefault();
 
