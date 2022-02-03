@@ -2,9 +2,11 @@
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using WebApplicationMusei.Helpers;
+using WebApplicationMusei.Models.Dtos;
 using WebApplicationMusei.Models.Entities;
 
 namespace WebApplicationMusei.Controllers
@@ -37,7 +39,7 @@ namespace WebApplicationMusei.Controllers
         // POST: NazioniController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(Nazione model) //IFormCollection collection)
+        public ActionResult Create(NazioneDto model) //IFormCollection collection)
         {
             try
             {
@@ -50,8 +52,15 @@ namespace WebApplicationMusei.Controllers
                     ViewData["MsgKo"] = msgKo + msgKoAggregate;
                     return View(model);
                 }
-                //var model = new Nazione();
                 DatabaseHelper.SaveNazione(model);
+                if (model.FileFlag != null)
+                {
+                    //1)creazione cartella nazioni/id in uploads se non esiste con id quello del modello
+                    //2)salvare il contenuto di FileFlag nel percorso creato
+                    model.ImgBandiera = Guid.NewGuid() + Path.GetExtension(model.FileFlag.FileName);
+                    DatabaseHelper.SaveNazione(model);
+
+                }
                 return RedirectToAction(nameof(Index)); //redirect alla lista se non scatta un'eccezione
             }
             catch (Exception ex)
