@@ -55,9 +55,26 @@ namespace WebApplicationMusei.Controllers
                 DatabaseHelper.SaveNazione(model);
                 if (model.FileFlag != null)
                 {
-                    //1)creazione cartella nazioni/id in uploads se non esiste con id quello del modello
+                    var path = PathHelper.GetPathNazione(model.Id);
+                    if (!Directory.Exists(path))
+                    {
+                        //1)creazione cartella nazioni/id in uploads se non esiste con id quello del modello
+                        Directory.CreateDirectory(path);
+                    }
                     //2)salvare il contenuto di FileFlag nel percorso creato
                     model.ImgBandiera = Guid.NewGuid() + Path.GetExtension(model.FileFlag.FileName);
+                    var filePath = path + "\\" + model.ImgBandiera;
+                    using (Stream fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        try
+                        {
+                            model.FileFlag.CopyTo(fileStream);
+                        }
+                        catch (Exception ex)
+                        {
+
+                        }
+                    }
                     DatabaseHelper.SaveNazione(model);
 
                 }
@@ -94,12 +111,12 @@ namespace WebApplicationMusei.Controllers
                     //    msgKo += error.ErrorMessage + "<br>";
                     //}
                     var msgKoAggregate = errors.Select(t => t.ErrorMessage).Aggregate((x, y) => $"{x}<br>{y}");
-                    ViewData["MsgKo"] = msgKo+msgKoAggregate;
+                    ViewData["MsgKo"] = msgKo + msgKoAggregate;
                     return View(model);
                 }
                 DatabaseHelper.SaveNazione(model);
                 //inseriamo messaggio update completato
-                ViewData["MsgOk"] = "Aggiornamento avvenuto con successo"; 
+                ViewData["MsgOk"] = "Aggiornamento avvenuto con successo";
             }
             catch
             {
