@@ -2,9 +2,11 @@
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using WebApplicationMusei.Helpers;
+using WebApplicationMusei.Models.Dtos;
 using WebApplicationMusei.Models.Entities;
 
 namespace WebApplicationMusei.Controllers
@@ -37,20 +39,52 @@ namespace WebApplicationMusei.Controllers
         // POST: NazioniController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(Nazione model) //IFormCollection collection)
+        public ActionResult Create(NazioneDto model) //IFormCollection collection)
         {
             try
             {
 
-                // if (ModelState.IsValid) da completare
-                //var model = new Nazione();
+                if (!ModelState.IsValid)
+                {
+                    var msgKo = "Completa tutti i campi nella maniera corretta<br>";
+                    var errors = ModelState.Values.SelectMany(v => v.Errors); //recuperiamo la lista di errori
+                    var msgKoAggregate = errors.Select(t => t.ErrorMessage).Aggregate((x, y) => $"{x}<br>{y}"); //concatena in una string gli errori
+                    ViewData["MsgKo"] = msgKo + msgKoAggregate;
+                    return View(model);
+                }
                 DatabaseHelper.SaveNazione(model);
-                return RedirectToAction(nameof(Index));
+                if (model.FileFlag != null)
+                {
+                    var path = PathHelper.GetPathNazione(model.Id);
+                    if (!Directory.Exists(path))
+                    {
+                        //1)creazione cartella nazioni/id in uploads se non esiste con id quello del modello
+                        Directory.CreateDirectory(path);
+                    }
+                    //2)salvare il contenuto di FileFlag nel percorso creato
+                    model.ImgBandiera = Guid.NewGuid() + Path.GetExtension(model.FileFlag.FileName);
+                    var filePath = path + "\\" + model.ImgBandiera;
+                    using (Stream fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        try
+                        {
+                            model.FileFlag.CopyTo(fileStream);
+                        }
+                        catch (Exception ex)
+                        {
+
+                        }
+                    }
+                    DatabaseHelper.SaveNazione(model);
+
+                }
+                return RedirectToAction(nameof(Index)); //redirect alla lista se non scatta un'eccezione
             }
             catch (Exception ex)
             {
                 //ex.Message + ModelBinderAttribute dovranno essere passati alla view
-                return View();
+                ViewData["MsgKo"] = ex.Message; //ex.message deve essere loggato e non inviato all'utente, customizzare il msg in Errore server riprova piu tardi
+                return View(model);
             }
         }
 
@@ -77,12 +111,12 @@ namespace WebApplicationMusei.Controllers
                     //    msgKo += error.ErrorMessage + "<br>";
                     //}
                     var msgKoAggregate = errors.Select(t => t.ErrorMessage).Aggregate((x, y) => $"{x}<br>{y}");
-                    ViewData["MsgKo"] = msgKo+msgKoAggregate;
+                    ViewData["MsgKo"] = msgKo + msgKoAggregate;
                     return View(model);
                 }
                 DatabaseHelper.SaveNazione(model);
                 //inseriamo messaggio update completato
-                ViewData["MsgOk"] = "Aggiornamento avvenuto con successo"; 
+                ViewData["MsgOk"] = "Aggiornamento avvenuto con successo";
             }
             catch
             {

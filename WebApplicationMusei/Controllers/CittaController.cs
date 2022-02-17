@@ -12,13 +12,13 @@ namespace WebApplicationMusei.Controllers
 {
     public class CittaController : Controller
     {
-        
+
 
 
         // GET: CittaController
         public ActionResult Index()
         {
-            var model = DatabaseHelper.GetAllCitta(); 
+            var model = DatabaseHelper.GetAllCitta();
             return View(model);
         }
 
@@ -41,17 +41,28 @@ namespace WebApplicationMusei.Controllers
         // POST: CittaController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult Create(Citta model)
         {
             try
             {
-                // if (ModelState.IsValid) da completare
-                // qui  bisogna controllare anche nazioneid > 0
+                if (!ModelState.IsValid || model.NazioneId < 1)
+                {
+                    var msgKo = "Completa tutti i campi nella maniera corretta<br>";
+                    var errors = ModelState.Values.SelectMany(v => v.Errors);
+                    var msgKoAggregate = errors.Select(t => t.ErrorMessage).Aggregate((x, y) => $"{x}<br>{y}");
+                    ViewData["MsgKo"] = msgKo + msgKoAggregate;
+                    var viewModel = new CittaViewModel(model, DatabaseHelper.GetAllNazione());
+                    return View(viewModel);
+                }
+                DatabaseHelper.SaveCitta(model);
                 return RedirectToAction(nameof(Index));
             }
             catch
             {
-                return View();
+
+                ViewData["MsgKo"] = "Errore, inserimento non riuscito";
+                var viewModel = new CittaViewModel(model, DatabaseHelper.GetAllNazione());
+                return View(viewModel);
             }
         }
 
@@ -70,11 +81,11 @@ namespace WebApplicationMusei.Controllers
         // POST: CittaController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit( Citta model)
+        public ActionResult Edit(Citta model)
         {
             try
             {
-                if (!ModelState.IsValid || model.NazioneId<1)
+                if (!ModelState.IsValid || model.NazioneId < 1)
                 {
                     var msgKo = "Completa tutti i campi nella maniera corretta<br>";
                     var errors = ModelState.Values.SelectMany(v => v.Errors);
@@ -83,19 +94,24 @@ namespace WebApplicationMusei.Controllers
                     //    msgKo += error.ErrorMessage + "<br>";
                     //}
                     var msgKoAggregate = errors.Select(t => t.ErrorMessage).Aggregate((x, y) => $"{x}<br>{y}");
-                    ViewData["MsgKo"] = msgKo+msgKoAggregate;
-                    return View(model);
+                    ViewData["MsgKo"] = msgKo + msgKoAggregate;
+
                 }
-                DatabaseHelper.SaveCitta(model);
-                //inseriamo messaggio update completato
-                ViewData["MsgOk"] = "Aggiornamento avvenuto con successo";
+                else
+                {
+                    DatabaseHelper.SaveCitta(model);
+                    //inseriamo messaggio update completato
+                    ViewData["MsgOk"] = "Aggiornamento avvenuto con successo";
+
+                }
             }
             catch
             {
                 //inseriamo un eventuale errore
                 ViewData["MsgKo"] = "Si è verificato un problema durante l'aggiornamento!";
             }
-            return View(model);
+            var viewModel = new CittaViewModel(model, DatabaseHelper.GetAllNazione());
+            return View(viewModel);
         }
 
         // GET: CittaController/Delete/5

@@ -15,8 +15,9 @@ namespace WebApplicationMusei
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration,IWebHostEnvironment env)
         {
+            PathHelper.WebRootPath = env.ContentRootPath;
             Configuration = configuration;
         }
 
