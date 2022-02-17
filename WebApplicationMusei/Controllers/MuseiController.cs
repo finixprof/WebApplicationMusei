@@ -11,7 +11,7 @@ namespace WebApplicationMusei.Controllers
 {
     public class MuseiController : Controller
     {
-                // GET: MuseiController
+        // GET: MuseiController
         public ActionResult Index()
         {
             var model = DatabaseHelper.GetAllMuseo();
@@ -30,6 +30,30 @@ namespace WebApplicationMusei.Controllers
         {
             return View();
         }
+
+
+        public IActionResult Excel()
+        {
+            var musei = DatabaseHelper.GetAllMuseo();
+            try
+            {
+                var content = ExcelHelper.CreateExcelMuseiList(musei);
+                //facciamo dello stream
+                var contentType = "application/octet-stream";
+
+                //creo la response come file
+                var fileName = $"musei_{DateTime.Now.ToShortDateString().Replace("/","_")}.xlsx";
+                return File(content, contentType, fileName);
+
+            }
+            catch (Exception ex)
+            {
+                ViewData["MsgKo"] = ex.Message;
+            }
+            return View();
+
+        }
+
 
         // POST: MuseiController/Create
         [HttpPost]
