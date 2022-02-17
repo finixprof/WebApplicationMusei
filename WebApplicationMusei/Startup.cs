@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,6 +27,7 @@ namespace WebApplicationMusei
         {
             services.AddControllersWithViews();
             DatabaseHelper.ConnectionString = Configuration.GetConnectionString("Musei");
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
             //Configuration.GetValue<string>("key"); per leggere qualsiasi parametro da appsettings.json
         }
 
