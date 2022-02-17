@@ -134,5 +134,28 @@ namespace WebApplicationMusei.Controllers
                 return View();
             }
         }
+
+
+        public IActionResult Excel()
+        {
+            var citta = DatabaseHelper.GetAllCitta();
+            try
+            {
+                var content = ExcelHelper.CreateExcelCittaList(citta);
+                //facciamo dello stream
+                var contentType = "application/octet-stream";
+
+                //creo la response come file
+                var fileName = $"citta_{DateTime.Now.ToShortDateString().Replace("/", "_")}.xlsx";
+                return File(content, contentType, fileName);
+
+            }
+            catch (Exception ex)
+            {
+                ViewData["MsgKo"] = ex.Message;
+            }
+            return View();
+
+        }
     }
 }

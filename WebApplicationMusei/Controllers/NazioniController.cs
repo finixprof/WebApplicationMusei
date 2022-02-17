@@ -146,5 +146,27 @@ namespace WebApplicationMusei.Controllers
                 return View();
             }
         }
+
+        public IActionResult Excel()
+        {
+            var nazioni = DatabaseHelper.GetAllNazione();
+            try
+            {
+                var content = ExcelHelper.CreateExcelNazioniList(nazioni);
+                //facciamo dello stream
+                var contentType = "application/octet-stream";
+
+                //creo la response come file
+                var fileName = $"nazioni_{DateTime.Now.ToShortDateString().Replace("/", "_")}.xlsx";
+                return File(content, contentType, fileName);
+
+            }
+            catch (Exception ex)
+            {
+                ViewData["MsgKo"] = ex.Message;
+            }
+            return View();
+
+        }
     }
 }
