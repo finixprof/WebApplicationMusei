@@ -43,6 +43,7 @@ namespace WebApplicationMusei.Helpers
                 //var workSheet = excel.Workbook.Worksheets.Add("Sheet1");
                 //workSheet.Cells[1, 1].LoadFromCollection(data, true);  
             }
+            memoryStream.Position = 0;
             return memoryStream;
             //throw new Exception("Errore non è stato possibile creare il file excel");
         }
